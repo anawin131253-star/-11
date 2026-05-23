@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>SMART LMS</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+font-family:sans-serif;
+}
+
+body{
+background:
+linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.9)),
+url('7.jpg');
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+color:white;
+overflow-x:hidden;
+}
+
+.glass{
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 8px 32px rgba(0,0,0,.35);
+}
+
+.float{
+animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0px);}
+}
+
+.btn{
+transition:.35s;
+}
+
+.btn:hover{
+transform:translateY(-4px) scale(1.02);
+}
+
+.card{
+transition:.4s;
+overflow:hidden;
+position:relative;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 15px 35px rgba(0,0,0,.45);
+}
+
+.glow{
+text-shadow:
+0 0 10px rgba(250,204,21,.7),
+0 0 20px rgba(250,204,21,.5);
+}
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#facc15;
+border-radius:10px;
+}
+
+#loader{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.loaderText{
+font-size:60px;
+font-weight:900;
+color:#facc15;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:.5;}
+50%{opacity:1;}
+100%{opacity:.5;}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+<h1 class="loaderText">SMART LMS</h1>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage"
+class="min-h-screen flex items-center justify-center px-5">
+
+<div class="glass w-full max-w-md rounded-[40px] p-10 text-center">
+
+<img
+src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFiEYfcIpTn_K-szwPgTjFwcq163DFSI70ng&s"
+class="w-36 h-36 mx-auto rounded-full border-4 border-yellow-400 object-cover float mb-6">
+
+<h1 class="text-5xl font-black text-yellow-400 glow mb-2">
+SMART LMS
+</h1>
+
+<p class="text-gray-300 mb-8">
+ระบบจัดการเรียนออนไลน์
+</p>
+
+<input
+id="password"
+type="password"
+placeholder="กรอกรหัสนักเรียน"
+class="w-full p-4 rounded-2xl text-black text-center text-lg font-bold outline-none mb-5"
+onkeypress="if(event.key==='Enter') login()"
+/>
+
+<button
+onclick="login()"
+class="btn w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black py-4 rounded-2xl text-lg">
+
+🚀 เข้าสู่ระบบ
+
+</button>
+
+</div>
+
+</div>
+
+<!-- WEBSITE -->
+<div id="website" style="display:none;">
+
+<header class="fixed top-0 left-0 w-full z-50 glass">
+
+<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+<div class="flex items-center gap-4">
+
+<img
+src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFiEYfcIpTn_K-szwPgTjFwcq163DFSI70ng&s"
+class="w-14 h-14 rounded-full border-2 border-yellow-400 object-cover">
+
+<div>
+
+<h1 class="text-2xl font-black text-yellow-400">
+SMART LMS
+</h1>
+
+<p class="text-xs text-gray-300">
+โพนทองพัฒนาวิทยา
+</p>
+
+</div>
+
+</div>
+
+<div class="text-right flex items-center gap-4">
+
+<div>
+
+<h2 id="studentName"
+class="font-black text-yellow-300 text-right">
+ผู้ใช้งาน
+</h2>
+
+<p id="clock"
+class="text-green-400 font-mono text-sm text-right"></p>
+
+</div>
+
+<button
+onclick="logout()"
+class="bg-red-500 hover:bg-red-400 px-4 py-2 rounded-xl font-bold text-white transition">
+
+ออกจากระบบ
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+<section class="min-h-screen flex items-center px-6 pt-32">
+
+<div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center w-full">
+
+<div>
+
+<h1 class="text-6xl font-black leading-tight mb-6">
+
+SMART
+<span class="text-yellow-400 glow">
+SCHOOL
+</span>
+
+LMS
+
+</h1>
+
+<p class="text-lg text-gray-300 leading-relaxed mb-8">
+
+ระบบเรียนออนไลน์สุดทันสมัย
+ดูบทเรียนย้อนหลัง เช็คชื่อ และเรียนได้ทุกที่ทุกเวลา
+
+</p>
+
+<div class="flex flex-wrap gap-4">
+
+<button
+onclick="checkIn()"
+class="btn bg-yellow-400 hover:bg-yellow-300 text-black px-8 py-4 rounded-2xl font-black">
+
+✅ เช็คชื่อเข้าเรียน
+
+</button>
+
+<a href="#subjects"
+class="btn glass px-8 py-4 rounded-2xl font-bold">
+
+🎥 ดูบทเรียน
+
+</a>
+
+<button
+onclick="openTeacher()"
+class="btn bg-blue-500 hover:bg-blue-400 px-8 py-4 rounded-2xl font-bold">
+
+👨‍🏫 ระบบครู
+
+</button>
+
+</div>
+
+</div>
+
+<div class="glass rounded-[45px] p-8 border border-white/10 relative overflow-hidden">
+
+<div class="relative z-10 text-center">
+
+<img
+src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFiEYfcIpTn_K-szwPgTjFwcq163DFSI70ng&s"
+class="w-40 h-40 mx-auto rounded-full border-4 border-yellow-400 object-cover shadow-2xl float mb-6">
+
+<h1 class="text-5xl font-black text-yellow-400 glow mb-2 tracking-wide">
+
+โพนทองพัฒนาวิทยา
+
+</h1>
+
+<h2 class="text-3xl font-black text-white mb-5 tracking-widest">
+
+SMART LMS SYSTEM
+
+</h2>
+
+<div class="inline-flex items-center gap-3 glass px-6 py-3 rounded-full border border-green-500/20 bg-green-500/10 mb-8">
+
+<div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+
+<span class="text-green-300 font-black tracking-wide">
+ระบบพร้อมใช้งาน
+</span>
+
+</div>
+
+<div class="glass rounded-[35px] p-8 border border-white/10 bg-black/30 shadow-inner">
+
+<p class="text-gray-400 text-sm font-bold tracking-[4px] uppercase mb-3">
+
+เวลาปัจจุบัน
+
+</p>
+
+<h1 id="clock2"
+class="text-5xl font-black text-green-400 font-mono tracking-wider glow">
+
+00:00:00
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="subjects" class="py-20 px-6">
+
+<div class="max-w-7xl mx-auto">
+
+<h1 class="text-5xl font-black text-center mb-16 text-yellow-400 glow">
+
+📚 บทเรียนย้อนหลัง
+
+</h1>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+<div class="glass rounded-[30px] card">
+
+<img
+src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop"
+class="w-full h-52 object-cover">
+
+<div class="p-6">
+
+<h2 class="text-2xl font-black text-yellow-300 mb-4">
+พื้นฐานภาษาอังกฤษ
+</h2>
+
+<a
+href="https://www.youtube.com/watch?v=z4Lon8Zu1Do&t=39s"
+target="_blank"
+class="btn block w-full bg-yellow-400 hover:bg-yellow-300 text-black text-center py-4 rounded-2xl font-black text-lg mt-5">
+
+🎥 ดูบทเรียน
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="py-20 px-6">
+
+<div class="max-w-5xl mx-auto glass rounded-[40px] p-10">
+
+<h1 class="text-4xl font-black text-yellow-400 mb-10 text-center">
+
+📋 ประวัติการเช็คชื่อ
+
+</h1>
+
+<div id="attendanceList"
+class="space-y-4"></div>
+
+</div>
+
+</section>
+
+<div id="teacherPanel"
+style="display:none;"
+class="fixed inset-0 bg-black/95 z-[200] p-8 overflow-y-auto">
+
+<div class="max-w-5xl mx-auto">
+
+<div class="flex justify-between items-center mb-10">
+
+<h1 class="text-4xl font-black text-yellow-400">
+👨‍🏫 ระบบครู
+</h1>
+
+<div class="flex gap-3">
+
+<button
+onclick="clearAllAttendance()"
+class="bg-red-600 hover:bg-red-500 px-5 py-3 rounded-xl font-bold">
+
+🗑 ล้างข้อมูล
+
+</button>
+
+<button
+onclick="closeTeacher()"
+class="bg-red-500 hover:bg-red-400 px-5 py-3 rounded-xl font-bold">
+
+ปิด
+
+</button>
+
+</div>
+
+</div>
+
+<div class="glass rounded-[30px] p-8">
+
+<h2 class="text-2xl font-black text-green-400 mb-4">
+
+นักเรียนเข้าเรียน
+
+</h2>
+
+<p id="totalStudents"
+class="text-yellow-300 mb-6 font-bold"></p>
+
+<div id="teacherList"
+class="space-y-4"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* FIREBASE */
+const firebaseConfig = {
+
+apiKey: "ใส่ API KEY",
+authDomain: "YOURPROJECT.firebaseapp.com",
+projectId: "YOURPROJECT",
+storageBucket: "YOURPROJECT.appspot.com",
+messagingSenderId: "123456789",
+appId: "APPID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* STUDENTS */
+const students={
+
+"31740":"นายจิระวัฒน์ ทศกร",
+"32276":"นายติณณ์ เกื้อหนองขุ่น",
+"32244":"นายตุลธร เพชรสุทธิ์",
+"32037":"นายทีปกร เนินแสง",
+"31743":"นายธนพล พลาโส",
+"32247":"นายธนพล มนตรีโพธิ์",
+"32249":"เด็กชายนรากานต์ มาศรักษา",
+"33581":"นายนวพล ศิริสุวิชา",
+"31784":"นายบุญญ์บริบูรณ์ พลวี",
+"31785":"นายปรัชญา ชินทะวัน",
+"31786":"นายเป็นหนึ่ง ชลสาร",
+"31745":"นายพชรพล กุมผัน",
+"31789":"นายภณวัจน์ ซอยรัมย์",
+"31790":"นายภาสวีส์ พลเยี่ยม",
+"31753":"นายภูสิทธิ์ ตรีโอษฐ์",
+"31793":"นายวรัญญู ทองวงษ์",
+"31794":"นายศักรินทร์ วรรณสุทธิ์",
+"31796":"นายสิรวิทย์ ประดับพันธ์",
+"31797":"นายอาณาวิน ศรีอำพล",
+"31877":"นายเอกวิทย์ อยู่ไพร",
+"31839":"นางสาวกนกวรรณ เมืองพิน",
+"31798":"นางสาวกนกอร มีชัย",
+"33608":"นางสาวจิดาภา คำแดงไสย",
+"31760":"นางสาวจีรนันท์ แวงวรรณ",
+"33615":"นางสาวชลดา บุตรพรม",
+"31765":"นางสาวณิชานันท์ แวงวรรณ",
+"33624":"นางสาวธารารัตน์ จูนิพัทธ์",
+"33625":"นางสาวธิดาวรรณ ฤทธิขันธ์",
+"31769":"นางสาวปภัสรา แสงกล้า",
+"31770":"นางสาวปภากานต์ นพคุณ",
+"31851":"นางสาวพิมพ์ชนก ชายสวัสดิ์",
+"32145":"นางสาวภคพร พิมพ์หอม",
+"32186":"นางสาวภัทรวดี ทับบุญ",
+"31816":"นางสาววรัญญา น้อยศรี",
+"31856":"นางสาววริศรา ปรีชาเจริญกิจ",
+"33650":"นางสาวศิริวดี โชติแสง",
+"31820":"นางสาวสิริวรรณ ดาวงศ์กลาง",
+"33655":"นางสาวสุพิชญา นุ่นนาแซง",
+"31861":"นางสาวอภิญญา แสงรีย์",
+"31778":"นางสาวอุมารินทร์ พลเยี่ยม"
+};
+
+/* LOGIN */
+window.login=function(){
+
+const pass=
+document.getElementById("password").value;
+
+if(students[pass]){
+
+localStorage.setItem("student",students[pass]);
+
+document.getElementById("studentName").innerText=
+students[pass];
+
+document.getElementById("loginPage").style.display="none";
+
+document.getElementById("website").style.display="block";
+
+}else{
+
+alert("❌ ไม่พบรหัสนักเรียน");
+
+}
+
+}
+
+/* LOGOUT */
+window.logout=function(){
+
+localStorage.removeItem("student");
+location.reload();
+
+}
+
+/* CLOCK */
+function updateClock(){
+
+const now = new Date();
+
+const time =
+now.toLocaleTimeString("th-TH");
+
+document.getElementById("clock").innerText=time;
+
+document.getElementById("clock2").innerText=time;
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* CHECK IN */
+window.checkIn=async function(){
+
+const student=
+document.getElementById("studentName").innerText;
+
+const now=new Date();
+
+const date=
+now.toLocaleDateString("th-TH");
+
+const time=
+now.toLocaleTimeString("th-TH");
+
+const snapshot=
+await getDocs(collection(db,"attendance"));
+
+let duplicate=false;
+
+snapshot.forEach((docx)=>{
+
+const data=docx.data();
+
+if(data.student===student && data.date===date){
+
+duplicate=true;
+
+}
+
+});
+
+if(duplicate){
+
+alert("⚠️ วันนี้เช็คชื่อแล้ว");
+return;
+
+}
+
+await addDoc(
+collection(db,"attendance"),
+{
+student,
+date,
+time
+}
+);
+
+loadAttendance();
+alert("✅ เช็คชื่อสำเร็จ");
+
+}
+
+/* LOAD ATTENDANCE */
+async function loadAttendance(){
+
+const list=
+document.getElementById("attendanceList");
+
+const snapshot=
+await getDocs(collection(db,"attendance"));
+
+let history=[];
+
+snapshot.forEach((docx)=>{
+
+history.push({
+id:docx.id,
+...docx.data()
+});
+
+});
+
+if(history.length===0){
+
+list.innerHTML=`
+<p class="text-center text-gray-400">
+ยังไม่มีข้อมูล
+</p>
+`;
+
+return;
+
+}
+
+list.innerHTML="";
+
+history.reverse();
+
+history.forEach((item)=>{
+
+list.innerHTML+=`
+
+<div class="glass rounded-2xl p-5">
+
+<div class="grid md:grid-cols-3 gap-4 items-center">
+
+<div>
+<h2 class="text-yellow-300 font-black">
+${item.student}
+</h2>
+</div>
+
+<div>
+<h2 class="text-green-300 font-black">
+${item.date}
+</h2>
+</div>
+
+<div>
+<h2 class="text-blue-300 font-black">
+${item.time}
+</h2>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* TEACHER */
+window.openTeacher=function(){
+
+const pass=
+prompt("กรอกรหัสครู");
+
+if(pass!=="teacher123"){
+
+alert("❌ รหัสไม่ถูกต้อง");
+return;
+
+}
+
+document.getElementById("teacherPanel").style.display="block";
+
+loadTeacher();
+
+}
+
+window.closeTeacher=function(){
+
+document.getElementById("teacherPanel").style.display="none";
+
+}
+
+/* LOAD TEACHER */
+async function loadTeacher(){
+
+const list=
+document.getElementById("teacherList");
+
+const snapshot=
+await getDocs(collection(db,"attendance"));
+
+let history=[];
+
+snapshot.forEach((docx)=>{
+
+history.push({
+id:docx.id,
+...docx.data()
+});
+
+});
+
+document.getElementById("totalStudents").innerText=
+"จำนวนนักเรียนเข้าเรียน : "+history.length+" คน";
+
+if(history.length===0){
+
+list.innerHTML=`
+<p class="text-gray-400">
+ยังไม่มีข้อมูล
+</p>
+`;
+
+return;
+
+}
+
+list.innerHTML="";
+
+history.reverse();
+
+history.forEach((item)=>{
+
+list.innerHTML+=`
+
+<div class="glass rounded-2xl p-5 mb-4">
+
+<div class="grid md:grid-cols-4 gap-4 items-center">
+
+<div>
+<h2 class="text-yellow-300 font-black">
+${item.student}
+</h2>
+</div>
+
+<div>
+<h2 class="text-green-300 font-black">
+${item.date}
+</h2>
+</div>
+
+<div>
+<h2 class="text-blue-300 font-black">
+${item.time}
+</h2>
+</div>
+
+<div>
+
+<button
+onclick="deleteAttendance('${item.id}')"
+class="bg-red-500 hover:bg-red-400 px-4 py-2 rounded-xl font-bold w-full">
+
+ลบข้อมูล
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* DELETE */
+window.deleteAttendance=async function(id){
+
+if(confirm("ลบข้อมูลนี้ใช่ไหม ?")){
+
+await deleteDoc(doc(db,"attendance",id));
+
+loadAttendance();
+loadTeacher();
+
+}
+
+}
+
+/* CLEAR */
+window.clearAllAttendance=async function(){
+
+if(confirm("ต้องการล้างข้อมูลทั้งหมด ?")){
+
+const snapshot=
+await getDocs(collection(db,"attendance"));
+
+snapshot.forEach(async(item)=>{
+
+await deleteDoc(doc(db,"attendance",item.id));
+
+});
+
+loadAttendance();
+loadTeacher();
+
+}
+
+}
+
+/* AUTO LOGIN */
+window.onload=()=>{
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display="none";
+
+},1200);
+
+const student=
+localStorage.getItem("student");
+
+if(student){
+
+document.getElementById("studentName").innerText=
+student;
+
+document.getElementById("loginPage").style.display="none";
+
+document.getElementById("website").style.display="block";
+
+}
+
+loadAttendance();
+
+}
+
+</script>
+
+</body>
+</html>
